@@ -3409,6 +3409,30 @@ give_advice:
 	return -1;
 }
 
+int sequencer_show_current_patch(struct repository *r, struct replay_opts *opts)
+{
+	struct child_process cmd = CHILD_PROCESS_INIT;
+	cmd.git_cmd = 1;
+	switch (opts->action) {
+	case REPLAY_REVERT:
+		if (!refs_ref_exists(get_main_ref_store(r), "REVERT_HEAD"))
+			die(_("No revert in progress?"));
+		strvec_pushl(&cmd.args, "show", "REVERT_HEAD", "--", NULL);
+		break;
+	case REPLAY_PICK:
+		if (!refs_ref_exists(get_main_ref_store(r), "CHERRY_PICK_HEAD"))
+			die(_("No cherry-pick in progress?"));
+		strvec_pushl(&cmd.args, "show", "CHERRY_PICK_HEAD", "--", NULL);
+		break;
+	case REPLAY_INTERACTIVE_REBASE:
+		if (!refs_ref_exists(get_main_ref_store(r), "REBASE_HEAD"))
+			die(_("No rebase in progress?"));
+		strvec_pushl(&cmd.args, "show", "REBASE_HEAD", "--", NULL);
+		break;
+	}
+	return run_command(&cmd);
+}
+
 static int save_todo(struct todo_list *todo_list, struct replay_opts *opts,
 		     int reschedule)
 {

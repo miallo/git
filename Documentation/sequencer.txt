@@ -12,5 +12,10 @@
 	to clear the sequencer state after a failed cherry-pick or
 	revert.
 
+--show-current-patch::
+	Show the current patch when a revert or cherry-pick is
+	stopped because of conflicts. This is the equivalent of
+	`git show REVERT_HEAD` or `git show CHERRY_PICK_HEAD`.
+
 --abort::
 	Cancel the operation and return to the pre-sequence state.

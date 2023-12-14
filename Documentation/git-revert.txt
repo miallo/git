@@ -9,7 +9,7 @@ SYNOPSIS
 --------
 [verse]
 'git revert' [--[no-]edit] [-n] [-m <parent-number>] [-s] [-S[<keyid>]] <commit>...
-'git revert' (--continue | --skip | --abort | --quit)
+'git revert' (--continue | --skip | --abort | --quit | --show-current-patch)
 
 DESCRIPTION
 -----------

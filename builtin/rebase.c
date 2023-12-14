@@ -356,12 +356,9 @@ static int run_sequencer_rebase(struct rebase_options *opts)
 		ret = edit_todo_file(flags);
 		break;
 	case ACTION_SHOW_CURRENT_PATCH: {
-		struct child_process cmd = CHILD_PROCESS_INIT;
+		struct replay_opts replay_opts = get_replay_opts(opts);
 
-		cmd.git_cmd = 1;
-		strvec_pushl(&cmd.args, "show", "REBASE_HEAD", "--", NULL);
-		ret = run_command(&cmd);
-
+		ret = sequencer_show_current_patch(the_repository, &replay_opts);
 		break;
 	}
 	default:

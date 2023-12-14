@@ -10,7 +10,7 @@ SYNOPSIS
 [verse]
 'git cherry-pick' [--edit] [-n] [-m <parent-number>] [-s] [-x] [--ff]
 		  [-S[<keyid>]] <commit>...
-'git cherry-pick' (--continue | --skip | --abort | --quit)
+'git cherry-pick' (--continue | --skip | --abort | --quit | --show-current-patch)
 
 DESCRIPTION
 -----------

@@ -22,14 +22,14 @@
 
 static const char * const revert_usage[] = {
 	N_("git revert [--[no-]edit] [-n] [-m <parent-number>] [-s] [-S[<keyid>]] <commit>..."),
-	N_("git revert (--continue | --skip | --abort | --quit)"),
+	N_("git revert (--continue | --skip | --abort | --quit | --show-current-patch)"),
 	NULL
 };
 
 static const char * const cherry_pick_usage[] = {
 	N_("git cherry-pick [--edit] [-n] [-m <parent-number>] [-s] [-x] [--ff]\n"
 	   "                [-S[<keyid>]] <commit>..."),
-	N_("git cherry-pick (--continue | --skip | --abort | --quit)"),
+	N_("git cherry-pick (--continue | --skip | --abort | --quit | --show-current-patch)"),
 	NULL
 };
 
@@ -91,6 +91,7 @@ static int run_sequencer(int argc, const char **argv, const char *prefix,
 		OPT_CMDMODE(0, "continue", &cmd, N_("resume revert or cherry-pick sequence"), 'c'),
 		OPT_CMDMODE(0, "abort", &cmd, N_("cancel revert or cherry-pick sequence"), 'a'),
 		OPT_CMDMODE(0, "skip", &cmd, N_("skip current commit and continue"), 's'),
+		OPT_CMDMODE(0, "show-current-patch", &cmd, N_("show the patch file being reverted or cherry-picked"), 'p'),
 		OPT_CLEANUP(&cleanup_arg),
 		OPT_BOOL('n', "no-commit", &opts->no_commit, N_("don't automatically commit")),
 		OPT_BOOL('e', "edit", &opts->edit, N_("edit the commit message")),
@@ -152,6 +153,8 @@ static int run_sequencer(int argc, const char **argv, const char *prefix,
 			this_operation = "--continue";
 		else if (cmd == 's')
 			this_operation = "--skip";
+		else if (cmd == 'p')
+			this_operation = "--show-current-patch";
 		else {
 			assert(cmd == 'a');
 			this_operation = "--abort";
@@ -222,6 +225,8 @@ static int run_sequencer(int argc, const char **argv, const char *prefix,
 		return sequencer_rollback(the_repository, opts);
 	if (cmd == 's')
 		return sequencer_skip(the_repository, opts);
+	if (cmd == 'p')
+		return sequencer_show_current_patch(the_repository, opts);
 	return sequencer_pick_revisions(the_repository, opts);
 }
 

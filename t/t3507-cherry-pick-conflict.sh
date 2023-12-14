@@ -566,6 +566,36 @@ test_expect_success 'cherry-pick preserves sparse-checkout' '
 	test_grep ! "Changes not staged for commit:" actual
 '
 
+test_expect_success 'cherry-pick --show-current-patch fails if no cherry-pick in progress' '
+	pristine_detach initial &&
+	test_must_fail git cherry-pick --show-current-patch
+'
+
+test_expect_success 'cherry-pick --show-current-patch describes patch that failed to apply' '
+	test_when_finished "git cherry-pick --abort || :" &&
+	pristine_detach initial &&
+	git show picked >expected &&
+
+	test_must_fail git cherry-pick picked &&
+
+	git cherry-pick --show-current-patch >actual &&
+	test_cmp expected actual
+'
+
+test_expect_success 'revert --show-current-patch fails if no revert in progress' '
+	pristine_detach initial &&
+	test_must_fail git revert --show-current-patch
+'
+
+test_expect_success 'revert --show-current-patch describes patch that failed to apply' '
+	test_when_finished "git revert --abort || :" &&
+	pristine_detach initial &&
+	git show picked >expected &&
+	test_must_fail git revert picked &&
+	git revert --show-current-patch >actual &&
+	test_cmp expected actual
+'
+
 test_expect_success 'cherry-pick --continue remembers --keep-redundant-commits' '
 	test_when_finished "git cherry-pick --abort || :" &&
 	pristine_detach initial &&

@@ -1650,7 +1650,7 @@ _git_checkout ()
 	esac
 }
 
-__git_sequencer_inprogress_options="--continue --quit --abort --skip"
+__git_sequencer_inprogress_options="--continue --quit --abort --skip --show-current-patch"
 
 __git_cherry_pick_inprogress_options=$__git_sequencer_inprogress_options
 
