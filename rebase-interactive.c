@@ -53,6 +53,7 @@ void append_todo_help(int command_count,
 "                   commit's log message, unless -C is used, in which case\n"
 "                   keep only this commit's message; -c is same as -C but\n"
 "                   opens the editor\n"
+"v, revert <commit> = revert the changes introduced by that commit\n"
 "x, exec <command> = run command (the rest of the line) using shell\n"
 "b, break = stop here (continue rebase later with 'git rebase --continue')\n"
 "d, drop <commit> = remove commit\n"
