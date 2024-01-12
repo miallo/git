@@ -1961,6 +1961,25 @@ static void add_pending_commit_list(struct rev_info *revs,
 	}
 }
 
+static const char *lookup_other_head(struct object_id *oid)
+{
+	struct ref_store *refs = get_main_ref_store(the_repository);
+	const char *name;
+	int i;
+	static const char *const other_head[] = {
+		"MERGE_HEAD", "REBASE_HEAD", "CHERRY_PICK_HEAD", "REVERT_HEAD"
+	};
+
+	for (i = 0; i < ARRAY_SIZE(other_head); i++) {
+		name = refs_resolve_ref_unsafe(refs, other_head[i],
+					       RESOLVE_REF_READING, oid, NULL);
+		if (name)
+			return name;
+	}
+
+	die("--merge without MERGE_HEAD, REBASE_HEAD, CHERRY_PICK_HEAD or REVERT_HEAD?");
+}
+
 static void prepare_show_merge(struct rev_info *revs)
 {
 	struct commit_list *bases;
@@ -1974,13 +1993,7 @@ static void prepare_show_merge(struct rev_info *revs)
 	if (repo_get_oid(the_repository, "HEAD", &oid))
 		die("--merge without HEAD?");
 	head = lookup_commit_or_die(&oid, "HEAD");
-	other_head = refs_resolve_ref_unsafe(get_main_ref_store(the_repository),
-					     "MERGE_HEAD",
-					     RESOLVE_REF_READING,
-					     &oid,
-					     NULL);
-	if (!other_head)
-		die("--merge without MERGE_HEAD?");
+	other_head = lookup_other_head(&oid);
 	other = lookup_commit_or_die(&oid, other_head);
 	add_pending_object(revs, &head->object, "HEAD");
 	add_pending_object(revs, &other->object, other_head);
