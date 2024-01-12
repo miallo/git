@@ -1967,17 +1967,23 @@ static void prepare_show_merge(struct rev_info *revs)
 	struct commit *head, *other;
 	struct object_id oid;
 	const char **prune = NULL;
+	const char *other_head;
 	int i, prune_num = 1; /* counting terminating NULL */
 	struct index_state *istate = revs->repo->index;
 
 	if (repo_get_oid(the_repository, "HEAD", &oid))
 		die("--merge without HEAD?");
 	head = lookup_commit_or_die(&oid, "HEAD");
-	if (repo_get_oid(the_repository, "MERGE_HEAD", &oid))
+	other_head = refs_resolve_ref_unsafe(get_main_ref_store(the_repository),
+					     "MERGE_HEAD",
+					     RESOLVE_REF_READING,
+					     &oid,
+					     NULL);
+	if (!other_head)
 		die("--merge without MERGE_HEAD?");
-	other = lookup_commit_or_die(&oid, "MERGE_HEAD");
+	other = lookup_commit_or_die(&oid, other_head);
 	add_pending_object(revs, &head->object, "HEAD");
-	add_pending_object(revs, &other->object, "MERGE_HEAD");
+	add_pending_object(revs, &other->object, other_head);
 	bases = repo_get_merge_bases(the_repository, head, other);
 	add_rev_cmdline_list(revs, bases, REV_CMD_MERGE_BASE, UNINTERESTING | BOTTOM);
 	add_pending_commit_list(revs, bases, UNINTERESTING | BOTTOM);
