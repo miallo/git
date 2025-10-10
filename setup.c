@@ -1301,7 +1301,7 @@ static int safe_directory_cb(const char *key, const char *value,
  * config settings; for non-bare repositories, their worktree needs to be
  * added, for bare ones their git directory.
  */
-static int ensure_valid_ownership(const char *gitfile,
+static int ensure_safe_repository(const char *gitfile,
 				  const char *worktree, const char *gitdir,
 				  struct strbuf *report)
 {
@@ -1339,7 +1339,7 @@ void die_upon_dubious_ownership(const char *gitfile, const char *worktree,
 	struct strbuf report = STRBUF_INIT, quoted = STRBUF_INIT;
 	const char *path;
 
-	if (ensure_valid_ownership(gitfile, worktree, gitdir, &report))
+	if (ensure_safe_repository(gitfile, worktree, gitdir, &report))
 		return;
 
 	strbuf_complete(&report, '\n');
@@ -1526,7 +1526,7 @@ static enum discovery_result setup_git_directory_gently_1(struct strbuf *dir,
 			const char *gitdir_candidate =
 				gitdir_path ? gitdir_path : gitdirenv;
 
-			if (ensure_valid_ownership(gitfile, dir->buf,
+			if (ensure_safe_repository(gitfile, dir->buf,
 						   gitdir_candidate, report)) {
 				strbuf_addstr(gitdir, gitdirenv);
 				ret = GIT_DIR_DISCOVERED;
@@ -1554,7 +1554,7 @@ static enum discovery_result setup_git_directory_gently_1(struct strbuf *dir,
 			if (get_allowed_bare_repo() == ALLOWED_BARE_REPO_EXPLICIT &&
 			    !is_implicit_bare_repo(dir->buf))
 				return GIT_DIR_DISALLOWED_BARE;
-			if (!ensure_valid_ownership(NULL, NULL, dir->buf, report))
+			if (!ensure_safe_repository(NULL, NULL, dir->buf, report))
 				return GIT_DIR_INVALID_OWNERSHIP;
 			strbuf_addstr(gitdir, ".");
 			return GIT_DIR_BARE;
