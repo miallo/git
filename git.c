@@ -42,7 +42,7 @@ const char git_usage_string[] =
 	   "           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--no-lazy-fetch]\n"
 	   "           [--no-optional-locks] [--no-advice] [--bare] [--git-dir=<path>]\n"
 	   "           [--work-tree=<path>] [--namespace=<name>] [--config-env=<name>=<envvar>]\n"
-	   "           [--allow-unsafe]\n"
+	   "           [--allow-unsafe] [--assume-unsafe]\n"
 	   "           <command> [<args>]");
 
 const char git_more_info_string[] =
@@ -357,6 +357,10 @@ static int handle_options(const char ***argv, int *argc, int *envchanged)
 				*envchanged = 1;
 		} else if (!strcmp(cmd, "--allow-unsafe")) {
 			setenv(GIT_ALLOW_UNSAFE, "1", 1);
+			if (envchanged)
+				*envchanged = 1;
+		} else if (!strcmp(cmd, "--assume-unsafe")) {
+			setenv(GIT_ASSUME_UNSAFE, "1", 1);
 			if (envchanged)
 				*envchanged = 1;
 		} else {

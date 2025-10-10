@@ -1238,6 +1238,12 @@ static int safe_directory_cb(const char *key, const char *value,
 {
 	struct safe_directory_data *data = d;
 
+	if (!strcmp(key, "safe.assumeunsafe")) {
+		if (git_config_bool(key, value))
+			setenv(GIT_ASSUME_UNSAFE, value, 0);
+		return 0;
+	}
+
 	if (strcmp(key, "safe.directory"))
 		return 0;
 
@@ -1329,6 +1335,9 @@ static int ensure_safe_repository(const char *gitfile,
 	free(data.path);
 	if (data.is_safe)
 		return 1;
+
+	if (git_env_bool("GIT_ASSUME_UNSAFE", 0))
+		return 0;
 
 	if (!git_env_bool("GIT_TEST_ASSUME_DIFFERENT_OWNER", 0) &&
 	    (!gitfile || is_path_owned_by_current_user(gitfile, report)) &&

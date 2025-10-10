@@ -14,7 +14,7 @@ SYNOPSIS
     [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--no-lazy-fetch]
     [--no-optional-locks] [--no-advice] [--bare] [--git-dir=<path>]
     [--work-tree=<path>] [--namespace=<name>] [--config-env=<name>=<envvar>]
-    [--allow-unsafe]
+    [--allow-unsafe] [--assume-unsafe]
     <command> [<args>]
 
 DESCRIPTION
@@ -237,6 +237,13 @@ If you just want to run git as if it was started in `<path>` then use
 	configuration or ownership, potentially resulting in arbitrary code
 	execution by hooks or configuration settings. Equivalent to setting
 	the environment variable `GIT_ALLOW_UNSAFE=1`.
+
+--assume-unsafe::
+	Prevent arbitrary code execution by hooks or configuration if not
+	executed in a "safe.directory". With setting this, filesystem ownership
+	of the repository in question no longer satisfies to mark it as safe.
+	Equivalent to setting `GIT_ASSUME_UNSAFE=1`. This is overridden if
+	`--allow-unsafe` is passed as well.
 
 GIT COMMANDS
 ------------
@@ -505,6 +512,11 @@ Git so take care if using a foreign front-end.
 	safety checks of "safe.directory" configuration and if the user
 	owns the repository before potentially executing arbitrary code
 	from hooks or config.
+
+`GIT_ASSUME_UNSAFE`::
+	This Boolean environment variable can be set to true enforce
+	explicit "safe.directory" configuration for the repository. This
+	can be overridden by setting `GIT_ALLOW_UNSAFE`.
 
 `GIT_INDEX_FILE`::
 	This environment variable specifies an alternate

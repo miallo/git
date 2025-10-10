@@ -43,6 +43,7 @@
 #define GIT_TEXT_DOMAIN_DIR_ENVIRONMENT "GIT_TEXTDOMAINDIR"
 #define GIT_ATTR_SOURCE_ENVIRONMENT "GIT_ATTR_SOURCE"
 #define GIT_ALLOW_UNSAFE "GIT_ALLOW_UNSAFE"
+#define GIT_ASSUME_UNSAFE "GIT_ASSUME_UNSAFE"
 
 /*
  * Environment variable used to propagate the --no-advice global option to the

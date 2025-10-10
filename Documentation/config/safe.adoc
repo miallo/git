@@ -60,3 +60,12 @@ which id the original user has.
 If that is not what you would prefer and want git to only trust
 repositories that are owned by root instead, then you can remove
 the `SUDO_UID` variable from root's environment before invoking git.
+
+safe.assumeUnsafe::
+	Boolean to indicate that the ownership of a repository should not
+	be taken into account when checking if the repository is safe. It
+	will prevent against accidental arbitrary code execution.
++
+To temporarily allow git execution in case of an assumed unsafe repository,
+run the command with `--allow-unsafe`. To permanently trust this path, add
+it to the `safe.directory` config.
