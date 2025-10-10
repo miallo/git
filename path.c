@@ -810,7 +810,7 @@ const char *enter_repo(const char *path, unsigned flags)
 			return NULL;
 		gitfile = read_gitfile(used_path.buf);
 		if (!(flags & ENTER_REPO_ANY_OWNER_OK))
-			die_upon_dubious_ownership(gitfile, NULL, used_path.buf);
+			die_upon_unsafe_repo(gitfile, NULL, used_path.buf);
 		if (gitfile) {
 			strbuf_reset(&used_path);
 			strbuf_addstr(&used_path, gitfile);
@@ -822,7 +822,7 @@ const char *enter_repo(const char *path, unsigned flags)
 	else {
 		const char *gitfile = read_gitfile(path);
 		if (!(flags & ENTER_REPO_ANY_OWNER_OK))
-			die_upon_dubious_ownership(gitfile, NULL, path);
+			die_upon_unsafe_repo(gitfile, NULL, path);
 		if (gitfile)
 			path = gitfile;
 		if (chdir(path))

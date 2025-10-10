@@ -1333,7 +1333,7 @@ static int ensure_safe_repository(const char *gitfile,
 	return data.is_safe;
 }
 
-void die_upon_dubious_ownership(const char *gitfile, const char *worktree,
+void die_upon_unsafe_repo(const char *gitfile, const char *worktree,
 				const char *gitdir)
 {
 	struct strbuf report = STRBUF_INIT, quoted = STRBUF_INIT;

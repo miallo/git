@@ -263,7 +263,7 @@ static void copy_or_link_directory(struct strbuf *src, struct strbuf *dest,
 	 * operation as the hardlinked files can be rewritten at will by the
 	 * potentially-untrusted user. We thus refuse to do so by default.
 	 */
-	die_upon_dubious_ownership(NULL, NULL, src_repo);
+	die_upon_unsafe_repo(NULL, NULL, src_repo);
 
 	mkdir_if_missing(dest->buf, 0777);
 

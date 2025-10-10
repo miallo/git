@@ -51,7 +51,7 @@ const char *resolve_gitdir_gently(const char *suspect, int *return_error_code);
  * config settings; for non-bare repositories, their worktree needs to be
  * added, for bare ones their git directory.
  */
-void die_upon_dubious_ownership(const char *gitfile, const char *worktree,
+void die_upon_unsafe_repo(const char *gitfile, const char *worktree,
 				const char *gitdir);
 
 void setup_work_tree(void);
