@@ -1307,12 +1307,6 @@ static int ensure_safe_repository(const char *gitfile,
 {
 	struct safe_directory_data data = { 0 };
 
-	if (!git_env_bool("GIT_TEST_ASSUME_DIFFERENT_OWNER", 0) &&
-	    (!gitfile || is_path_owned_by_current_user(gitfile, report)) &&
-	    (!worktree || is_path_owned_by_current_user(worktree, report)) &&
-	    (!gitdir || is_path_owned_by_current_user(gitdir, report)))
-		return 1;
-
 	/*
 	 * normalize the data.path for comparison with normalized paths
 	 * that come from the configuration file.  The path is unsafe
@@ -1330,7 +1324,16 @@ static int ensure_safe_repository(const char *gitfile,
 	git_protected_config(safe_directory_cb, &data);
 
 	free(data.path);
-	return data.is_safe;
+	if (data.is_safe)
+		return 1;
+
+	if (!git_env_bool("GIT_TEST_ASSUME_DIFFERENT_OWNER", 0) &&
+	    (!gitfile || is_path_owned_by_current_user(gitfile, report)) &&
+	    (!worktree || is_path_owned_by_current_user(worktree, report)) &&
+	    (!gitdir || is_path_owned_by_current_user(gitdir, report)))
+		return 1;
+
+	return 0;
 }
 
 void die_upon_unsafe_repo(const char *gitfile, const char *worktree,
