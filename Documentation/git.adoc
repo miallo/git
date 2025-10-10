@@ -14,6 +14,7 @@ SYNOPSIS
     [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--no-lazy-fetch]
     [--no-optional-locks] [--no-advice] [--bare] [--git-dir=<path>]
     [--work-tree=<path>] [--namespace=<name>] [--config-env=<name>=<envvar>]
+    [--allow-unsafe]
     <command> [<args>]
 
 DESCRIPTION
@@ -230,6 +231,12 @@ If you just want to run git as if it was started in `<path>` then use
 	Read gitattributes from <tree-ish> instead of the worktree. See
 	linkgit:gitattributes[5]. This is equivalent to setting the
 	`GIT_ATTR_SOURCE` environment variable.
+
+--allow-unsafe::
+	Temporarily trust the repository regardless of "safe.directory"
+	configuration or ownership, potentially resulting in arbitrary code
+	execution by hooks or configuration settings. Equivalent to setting
+	the environment variable `GIT_ALLOW_UNSAFE=1`.
 
 GIT COMMANDS
 ------------
@@ -492,6 +499,12 @@ The Git Repository
 These environment variables apply to 'all' core Git commands. Nb: it
 is worth noting that they may be used/overridden by SCMS sitting above
 Git so take care if using a foreign front-end.
+
+`GIT_ALLOW_UNSAFE`::
+	This Boolean environment variable can be set to true to skip the
+	safety checks of "safe.directory" configuration and if the user
+	owns the repository before potentially executing arbitrary code
+	from hooks or config.
 
 `GIT_INDEX_FILE`::
 	This environment variable specifies an alternate

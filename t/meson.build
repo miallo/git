@@ -100,6 +100,7 @@ integration_tests = [
   't0033-safe-directory.sh',
   't0034-root-safe-directory.sh',
   't0035-safe-bare-repository.sh',
+  't0036-allow-unsafe-directory.sh',
   't0040-parse-options.sh',
   't0041-usage.sh',
   't0050-filesystem.sh',

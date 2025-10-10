@@ -1307,6 +1307,9 @@ static int ensure_safe_repository(const char *gitfile,
 {
 	struct safe_directory_data data = { 0 };
 
+	if (git_env_bool("GIT_ALLOW_UNSAFE", 0))
+		return 1;
+
 	/*
 	 * normalize the data.path for comparison with normalized paths
 	 * that come from the configuration file.  The path is unsafe
@@ -1353,7 +1356,10 @@ void die_upon_unsafe_repo(const char *gitfile, const char *worktree,
 	      "%s"
 	      "To add an exception for this directory, call:\n"
 	      "\n"
-	      "\tgit config --global --add safe.directory %s"),
+	      "\tgit config --global --add safe.directory %s\n"
+	      "\n"
+	      "To temporarily bypass safety-checks, run 'git --allow-unsafe <command>'\n"
+	      "or set the environment variable 'GIT_ALLOW_UNSAFE=true'."),
 	    path, report.buf, quoted.buf);
 }
 
@@ -1797,7 +1803,10 @@ const char *setup_git_directory_gently(int *nongit_ok)
 			      "%s"
 			      "To add an exception for this directory, call:\n"
 			      "\n"
-			      "\tgit config --global --add safe.directory %s"),
+			      "\tgit config --global --add safe.directory %s\n"
+			      "\n"
+			      "To temporarily bypass safety-checks, run 'git --allow-unsafe <command>'\n"
+			      "or set the environment variable 'GIT_ALLOW_UNSAFE=true'."),
 			    dir.buf, report.buf, quoted.buf);
 		}
 		*nongit_ok = 1;
